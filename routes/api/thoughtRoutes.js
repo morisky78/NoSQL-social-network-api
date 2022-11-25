@@ -10,6 +10,16 @@ router.get('/', (req, res) => {
         })
 })
 
+router.get('/:thoughtId', (req, res) => {
+    Thought.findOne({ _id: req.params.thoughtId })
+        .then((thought) =>
+            !thought
+                ? res.status(404).json({ message: 'No thought with that ID' })
+                : res.json(thought)
+        )
+        .catch((err) => res.status(500).json(err));
+})
+
 
 router.post('/', (req, res) => 
     Thought.create(req.body)
