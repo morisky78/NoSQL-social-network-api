@@ -71,4 +71,35 @@ router.delete('/:thoughtId', (req, res) => {
     )
     .catch((err) => res.status(500).json(err));
 })
+
+// create a reaction and store the thought's reactions array field
+router.post('/:thoughtId/reactions', (req, res) => {
+    Thought.findByIdAndUpdate(
+        req.params.thoughtId, 
+        { $addToSet: { reactions: req.body }},
+        { runValidators: true, new: true }
+    ).then(thought => !thought
+        ? res.status(404).json({ message: 'No thought with that ID' })
+        : res.json(thought)
+    )
+    .catch((err) => res.status(500).json(err));
+})
+
+// remove a reaction by the reaction's reactionId
+router.delete('/:thoughtId/reactions/:reactionId', (req, res) => {
+    Thought.findByIdAndUpdate(
+        req.params.thoughtId,
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { runValidators: true, new: true }
+    ).then((thought) =>
+    !thought
+      ? res
+          .status(404)
+          .json({ message: 'No thought found with that ID :(' })
+      : res.json(thought)
+  )
+  .catch((err) => res.status(500).json(err));
+})
+
+
 module.exports = router;
