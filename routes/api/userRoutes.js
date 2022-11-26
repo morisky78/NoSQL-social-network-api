@@ -62,7 +62,6 @@ router.put('/:userId', (req, res) => {
                     { username : user.username },
                     { $set : {username: req.body.username} }
                 ).then( thoughts => {
-                    console.log(thoughts.modifiedCount);
                     res.json({ message: `${user.username} has changed to ${req.body.username}, and their thought(${thoughts.modifiedCount})'s username has been changed`});
                 }).catch((err) => res.status(500).json(err));   
             }
@@ -73,5 +72,34 @@ router.put('/:userId', (req, res) => {
         })
         .catch((err) => res.status(500).json(err));
 })
+
+// add a new friend to a user's friend list
+router.post('/:userId/friends/:friendId', (req, res) => {
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.params.friendId } },
+        { runValidators: true, new: true}
+      ).then((user) =>
+      !user
+        ? res.status(404).json({ message: 'No user found what the id' })
+        : res.json(user)
+    )
+    .catch((err) => res.status(500).json(err));
+})
+
+// remove a friend from a user's friend list
+router.delete('/:userId/friends/:friendId', (req, res) => {
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { runValidators: true, new: true }
+      ).then((user) =>
+      !user
+        ? res.status(404).json({ message: 'No user found what the id' })
+        : res.json(user)
+    )
+    .catch((err) => res.status(500).json(err));
+})
+
 
 module.exports = router;
