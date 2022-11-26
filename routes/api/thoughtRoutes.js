@@ -20,11 +20,10 @@ router.get('/:thoughtId', (req, res) => {
         .catch((err) => res.status(500).json(err));
 })
 
-
+// when create a new thought, the user's document is also updated adding the thought_id to thoughts 
 router.post('/', (req, res) => 
     Thought.create(req.body)
         .then(thought => {
-            console.log(req.body)
             User.findByIdAndUpdate(req.body.userId ,
                 {
                    $addToSet: { thoughts: thought._id }

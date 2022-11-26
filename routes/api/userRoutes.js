@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../../models');
+const { User, Thought } = require('../../models');
 
 router.get('/', (req, res) => {
     User.find()
@@ -31,27 +31,46 @@ router.get('/:userId', (req, res) => {
         .catch((err) => res.status(500).json(err));
 })
 
+// BONUS: when user deleted, the user's associated thoughts will be removed as well
 router.delete('/:userId', (req, res) => {
     User.findByIdAndDelete(req.params.userId)
         .then((user) =>
             !user
-                ? res.status(404).json({ message: 'No user with that ID' })
-                : res.json({ message: 'Rser deleted' })
+            ? res.status(404).json({ message: 'No user with that ID' })
+            : Thought.deleteMany( {username : user.username }
+                ).then( thoughts =>
+                    res.json({ message: `User deleted and their ${thoughts.deletedCount} thoughts found and deleted` })
+                )
         )
         .catch((err) => res.status(500).json(err));
 })
+
 
 router.put('/:userId', (req, res) => {
     User.findOneAndUpdate(
         { _id: req.params.userId },
         { $set: req.body },
-        { runValidators: true, new: true }
+        { runValidators: true, new: false }
       )
-        .then(user =>
-          !user
-            ? res.status(404).json({ message: 'No user with this id!' })
-            : res.json(user)
-        )
+        .then(user => {
+          if( !user ) {
+            res.status(404).json({ message: 'No user with this id!' })
+          } else {
+            // when username is updated, update their Thought's username value.
+            if ( user.username !== req.body.username) {
+                Thought.updateMany(
+                    { username : user.username },
+                    { $set : {username: req.body.username} }
+                ).then( thoughts => {
+                    console.log(thoughts.modifiedCount);
+                    res.json({ message: `${user.username} has changed to ${req.body.username}, and their thought(${thoughts.modifiedCount})'s username has been changed`});
+                }).catch((err) => res.status(500).json(err));   
+            }
+            else {
+                res.json({ message: `User information updated`})
+            }
+          }
+        })
         .catch((err) => res.status(500).json(err));
 })
 
