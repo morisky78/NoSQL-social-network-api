@@ -12,7 +12,7 @@ This application is an API for a social network web application where users can 
 ## Installation
 To use this application, you will need Node.js and two other npm packages installed, express, and mongoose. On your desired folder to locate the app, pull down the Repo into your computer by following line on your terminal.
 
-    $ git clone git@github.com:morisky78/Social-network-api.git
+    $ git clone git@github.com:morisky78/NoSQL-social-network-api.git
 
 Then install the npm package dependencies by following command
 
