@@ -23,10 +23,12 @@ Then, you will see node_modules folder has been created on your folder.
 ## Usage
 The application's API routes are tested in Insomnia. You can also use MongoDB Compass to make sure the data is stored properly under `snApiDb` database.
 
-The following video shows the demonstration of the functionality of the Social Network API back end, showing the process of retrieve, create, update and delete data of user, thoughts, friends and reactions in your database.
+The following video shows the demonstration of the functionality of the Social Network API.  
 https://watch.screencastify.com/v/X8ZzDmEw4b5iDhd7o1NH
+[<img src="./assets/demo-screenshot.png" height="400">](https://watch.screencastify.com/v/X8ZzDmEw4b5iDhd7o1NH "Demonstration video screen shot - NoSQL Social Network API")
 
-In the video, following functionality and routes are demonstrated in order:
+
+In the video, following functionality and routes are demonstrated **in order**:
 - How to start application server.
 - `POST` a new user
 - `GET` all users
@@ -46,10 +48,6 @@ In the video, following functionality and routes are demonstrated in order:
 
 So, `GET`, `POST`, `PUT`, `DELETE` routes for `users` and `thoughts` are tested to successfully create, retrieve, update, and delete users and thoughts in the database.
 And, `POST` and `DELETE` routes for `reactions` and `friends` are tested to successfully create and remove them in the database. 
-
-
-
-[<img src="./assets/demo-screenshot.png" height="400">](https://watch.screencastify.com/v/X8ZzDmEw4b5iDhd7o1NH "Demonstration video screen shot - NoSQL Social Network API")
 
 
 
